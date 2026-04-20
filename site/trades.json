@@ -1,17 +1,17 @@
 {
   "summary": {
     "starting_bankroll": 1000.0,
-    "current_bankroll": 900.0,
-    "total_pnl": -100.0,
-    "total_staked": 100.0,
-    "roi_pct": -100.0,
-    "closed_count": 5,
-    "active_count": 1,
-    "wins": 0,
+    "current_bankroll": 913.33,
+    "total_pnl": -86.67,
+    "total_staked": 120.0,
+    "roi_pct": -72.22,
+    "closed_count": 6,
+    "active_count": 0,
+    "wins": 1,
     "losses": 5,
-    "win_rate_pct": 0.0,
+    "win_rate_pct": 16.67,
     "tracking_since": "2026-04-19",
-    "last_updated": "2026-04-20T02:48:27Z"
+    "last_updated": "2026-04-20T14:27:00Z"
   },
   "trades": [
     {
@@ -76,11 +76,11 @@
       "p_model": 0.282051,
       "edge": 0.117949,
       "source": "live",
-      "status": "active",
-      "actual": null,
-      "won": null,
-      "pnl": null,
-      "bankroll_after": null
+      "status": "closed",
+      "actual": 4.0,
+      "won": true,
+      "pnl": 13.33,
+      "bankroll_after": 953.33
     },
     {
       "game_date": "2026-04-19",
@@ -97,7 +97,7 @@
       "actual": 1.0,
       "won": false,
       "pnl": -20.0,
-      "bankroll_after": 920.0
+      "bankroll_after": 933.33
     },
     {
       "game_date": "2026-04-19",
@@ -114,7 +114,7 @@
       "actual": 6.0,
       "won": false,
       "pnl": -20.0,
-      "bankroll_after": 900.0
+      "bankroll_after": 913.33
     }
   ]
 }
