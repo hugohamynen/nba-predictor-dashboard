@@ -140,6 +140,38 @@
       <div class="tbl-footer"><span id="closed-visible">0</span> shown · <span id="closed-total">0</span> total</div>
     </div>
   </section>
+
+  <section class="model-card">
+    <div class="section-head">
+      <h2>// MODEL.spec</h2>
+      <span class="muted">what you're watching</span>
+    </div>
+    <p>
+      <span class="accent">&gt; model</span>
+      Three XGBoost binary classifiers — one each for
+      <span class="accent">points</span>, <span class="accent">rebounds</span>, <span class="accent">assists</span> —
+      predicting whether a player goes OVER their Polymarket line. Gradient-boosted decision trees with
+      Optuna-tuned hyperparameters and <span class="accent">isotonic calibration</span> on top so the output
+      probabilities line up with observed hit-rates. <span class="muted">~123 engineered features per prop:</span>
+      10-game rolling averages for the stat, rest days / back-to-backs, home vs away, opponent defensive
+      rating by stat, and regime flags (<code>is_playoffs</code>, <code>is_final_week</code>,
+      <code>days_until_reg_end</code>). Bets only placed when model edge ≥ 5% vs the market price; flat 2% of
+      bankroll per bet.
+    </p>
+    <p>
+      <span class="accent">&gt; data</span>
+      <span class="accent">23,761</span> labeled Polymarket NBA player-prop markets from the 2025-26 season
+      (Polymarket has only listed NBA props since Dec 2025). Training window Dec 2025 → Feb 2026, held-out
+      validation on March 2026. Box-score ground truth pulled from <code>nba_api</code>; settlement in prod
+      uses the ESPN public API. <span class="accent">&gt; accuracy</span> test-set AUC
+      <span class="num">0.676</span> (assists, best), <span class="num">0.569</span> (points),
+      <span class="num">0.554</span> (rebounds); calibrated log-loss 0.668 / 0.678 / 0.694.
+      <span class="warn">&gt; caveat</span>
+      <span class="muted">the backtest's headline ROI is mostly a late-regular-season OVER bias — the model
+      does <em>not</em> beat a naive "always OVER in the last 2 weeks" baseline. this dashboard tracks live
+      paper performance precisely so that claim gets tested honestly, slate by slate.</span>
+    </p>
+  </section>
 </main>
 
 <footer>
