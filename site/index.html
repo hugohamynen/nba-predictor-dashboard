@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NBA_MODEL // TERMINAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="noise" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="prompt">user@nba-model</span>
+    <span class="sep">:</span>
+    <span class="path">~/paper_trading</span>
+    <span class="sep">$</span>
+    <span class="cmd">./watch --live</span>
+    <span class="caret"></span>
+  </div>
+  <div class="status">
+    <span class="dot" id="status-dot"></span>
+    <span id="status-text">SYNCING…</span>
+    <span class="sep-dot">·</span>
+    <span id="last-updated">—</span>
+  </div>
+</header>
+
+<main>
+  <section class="ascii-header">
+    <pre id="ascii">
+ ███╗   ██╗██████╗  █████╗    ███╗   ███╗ ██████╗ ██████╗ ███████╗██╗
+ ████╗  ██║██╔══██╗██╔══██╗   ████╗ ████║██╔═══██╗██╔══██╗██╔════╝██║
+ ██╔██╗ ██║██████╔╝███████║   ██╔████╔██║██║   ██║██║  ██║█████╗  ██║
+ ██║╚██╗██║██╔══██╗██╔══██║   ██║╚██╔╝██║██║   ██║██║  ██║██╔══╝  ██║
+ ██║ ╚████║██████╔╝██║  ██║   ██║ ╚═╝ ██║╚██████╔╝██████╔╝███████╗███████╗
+ ╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝
+    </pre>
+    <p class="tagline">
+      > paper-trading XGBoost player-props on Polymarket. bankroll seeded at $1,000.
+      <br />> <span class="muted">edge &lt; 5% = PASS. 2% flat stake. everything below is simulated cash.</span>
+    </p>
+  </section>
+
+  <section class="stats" id="stats">
+    <div class="card" data-key="current_bankroll">
+      <div class="label">BANKROLL</div>
+      <div class="value" id="val-bankroll">—</div>
+      <div class="sub" id="sub-bankroll">&nbsp;</div>
+    </div>
+    <div class="card" data-key="total_pnl">
+      <div class="label">TOTAL P&amp;L</div>
+      <div class="value" id="val-pnl">—</div>
+      <div class="sub" id="sub-pnl">&nbsp;</div>
+    </div>
+    <div class="card" data-key="roi_pct">
+      <div class="label">ROI</div>
+      <div class="value" id="val-roi">—</div>
+      <div class="sub">on $<span id="sub-staked">0</span> staked</div>
+    </div>
+    <div class="card" data-key="win_rate_pct">
+      <div class="label">WIN RATE</div>
+      <div class="value" id="val-winrate">—</div>
+      <div class="sub"><span id="sub-wl">0-0</span></div>
+    </div>
+    <div class="card" data-key="closed_count">
+      <div class="label">CLOSED</div>
+      <div class="value" id="val-closed">—</div>
+      <div class="sub">settled trades</div>
+    </div>
+    <div class="card" data-key="active_count">
+      <div class="label">ACTIVE</div>
+      <div class="value" id="val-active">—</div>
+      <div class="sub">awaiting tip-off</div>
+    </div>
+  </section>
+
+  <section class="chart-wrap">
+    <div class="section-head">
+      <h2>// EQUITY_CURVE.log</h2>
+      <div class="legend">
+        <span class="lg-dot backtest"></span><span>backtest</span>
+        <span class="lg-dot live"></span><span>live</span>
+      </div>
+    </div>
+    <canvas id="chart" height="320" aria-label="Cumulative bankroll over time"></canvas>
+  </section>
+
+  <section class="tables">
+    <div class="table-card">
+      <div class="section-head">
+        <h2>// ACTIVE_TRADES.tbl</h2>
+        <span class="muted" id="active-count-inline">0 open</span>
+      </div>
+      <div class="table-scroll">
+        <table id="active-table">
+          <thead>
+            <tr>
+              <th>DATE</th><th>PLAYER</th><th>STAT</th><th>LINE</th><th>SIDE</th>
+              <th class="num">PRICE</th><th class="num">STAKE</th><th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="section-head">
+        <h2>// CLOSED_TRADES.tbl</h2>
+        <div class="controls">
+          <input id="search" placeholder="grep player/stat…" />
+          <select id="filter-source">
+            <option value="all">all</option>
+            <option value="live">live only</option>
+            <option value="backtest">backtest only</option>
+          </select>
+          <select id="filter-result">
+            <option value="all">all</option>
+            <option value="win">wins</option>
+            <option value="loss">losses</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-scroll tall">
+        <table id="closed-table">
+          <thead>
+            <tr>
+              <th>DATE</th><th>PLAYER</th><th>STAT</th><th>LINE</th><th>SIDE</th>
+              <th class="num">PRICE</th><th class="num">ACTUAL</th>
+              <th class="num">STAKE</th><th class="num">P&amp;L</th><th>RESULT</th><th>SRC</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="tbl-footer"><span id="closed-visible">0</span> shown · <span id="closed-total">0</span> total</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>NBA_MODEL v0.1</span>
+  <span class="sep-dot">·</span>
+  <a href="https://github.com/hugohamynen" id="repo-link" target="_blank" rel="noopener">[src]</a>
+  <span class="sep-dot">·</span>
+  <span>settled nightly by GitHub Actions</span>
+  <span class="sep-dot">·</span>
+  <span class="disclaimer">research output. not betting advice.</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
