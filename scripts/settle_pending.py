@@ -161,7 +161,7 @@ def _recompute_summary(payload: dict) -> None:
     total_pnl = round(sum(float(t["pnl"]) for t in closed), 2)
     total_staked = round(sum(float(t["stake"]) for t in closed), 2)
     starting = float(payload["summary"]["starting_bankroll"])
-    current = closed[-1]["bankroll_after"] if closed else starting
+    current = round(starting + total_pnl, 2)
     payload["summary"].update({
         "current_bankroll": current,
         "total_pnl": total_pnl,

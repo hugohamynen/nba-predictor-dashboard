@@ -207,6 +207,11 @@ tbody tr:hover { background: rgba(0, 255, 156, 0.03); }
 .pnl-pos    { color: var(--accent); text-shadow: var(--glow); }
 .pnl-neg    { color: var(--danger); }
 
+.edge-strong { color: var(--accent); text-shadow: var(--glow); font-weight: 500; }
+.edge-ok     { color: #8be9a5; }
+.edge-weak   { color: var(--fg-dim); }
+.edge-neg    { color: var(--danger); }
+
 .tbl-footer { color: var(--fg-mute); font-size: 11px; padding: 8px 4px 0; text-align: right; }
 
 footer {

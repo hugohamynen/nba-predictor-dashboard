@@ -41,7 +41,7 @@
  ╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝
     </pre>
     <p class="tagline">
-      > paper-trading XGBoost player-props on Polymarket. bankroll seeded at $1,000.
+      > paper-trading XGBoost player-props on Polymarket. bankroll seeded at $1,000 on <span id="since-date">—</span>.
       <br />> <span class="muted">edge &lt; 5% = PASS. 2% flat stake. everything below is simulated cash.</span>
     </p>
   </section>
@@ -83,8 +83,7 @@
     <div class="section-head">
       <h2>// EQUITY_CURVE.log</h2>
       <div class="legend">
-        <span class="lg-dot backtest"></span><span>backtest</span>
-        <span class="lg-dot live"></span><span>live</span>
+        <span class="lg-dot live"></span><span>settled trade</span>
       </div>
     </div>
     <canvas id="chart" height="320" aria-label="Cumulative bankroll over time"></canvas>
@@ -93,15 +92,18 @@
   <section class="tables">
     <div class="table-card">
       <div class="section-head">
-        <h2>// ACTIVE_TRADES.tbl</h2>
-        <span class="muted" id="active-count-inline">0 open</span>
+        <h2>// FUTURE_BETS.tbl</h2>
+        <span class="muted" id="active-count-inline">0 open · awaiting tip-off</span>
       </div>
       <div class="table-scroll">
         <table id="active-table">
           <thead>
             <tr>
               <th>DATE</th><th>PLAYER</th><th>STAT</th><th>LINE</th><th>SIDE</th>
-              <th class="num">PRICE</th><th class="num">STAKE</th><th>STATUS</th>
+              <th class="num">PRICE</th>
+              <th class="num">P(MODEL)</th>
+              <th class="num">EDGE</th>
+              <th class="num">STAKE</th><th>STATUS</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -114,11 +116,6 @@
         <h2>// CLOSED_TRADES.tbl</h2>
         <div class="controls">
           <input id="search" placeholder="grep player/stat…" />
-          <select id="filter-source">
-            <option value="all">all</option>
-            <option value="live">live only</option>
-            <option value="backtest">backtest only</option>
-          </select>
           <select id="filter-result">
             <option value="all">all</option>
             <option value="win">wins</option>
@@ -131,8 +128,10 @@
           <thead>
             <tr>
               <th>DATE</th><th>PLAYER</th><th>STAT</th><th>LINE</th><th>SIDE</th>
-              <th class="num">PRICE</th><th class="num">ACTUAL</th>
-              <th class="num">STAKE</th><th class="num">P&amp;L</th><th>RESULT</th><th>SRC</th>
+              <th class="num">PRICE</th>
+              <th class="num">EDGE</th>
+              <th class="num">ACTUAL</th>
+              <th class="num">STAKE</th><th class="num">P&amp;L</th><th>RESULT</th>
             </tr>
           </thead>
           <tbody></tbody>
